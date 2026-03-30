@@ -1,0 +1,74 @@
+{
+    "item_id": "[str | auto] UNIQUE IDENTIFIER FOR THE ITEM",
+    "item_metadata": {
+        "ingestion_time": "[str | auto] TIMESTAMP OF WHEN THE ITEM WAS INGESTED (ISO 8601 FORMAT)",
+        "contributor": {
+            "name": "[str | optional] NAME OF THE CONTRIBUTOR",
+            "email": "[str | optional] EMAIL ADDRESS OF THE CONTRIBUTOR",
+            "affiliation": "[str | optional] AFFILIATION OF THE CONTRIBUTOR"
+        },
+        "source": {
+            "benchmark_name": "[str | non-empty] NAME OF THE BENCHMARK OR DATASET",
+            "benchmark_version": "[str | required] VERSION OF THE BENCHMARK OR DATASET",
+            "paper_url": "[str | optional] URL TO THE BENCHMARK PAPER",
+            "dataset_url": "[str | optional] URL TO THE BENCHMARK DATASET",
+            "benchmark_tags": "[list[str] | optional] TAGS OR KEYWORDS ASSOCIATED WITH THE BENCHMARK OR DATASET"
+        }
+    },
+    "item_content": {
+        "input": "[list[str,dict] | non-empty] CONTENT OF THE ITEM, SUCH AS A QUESTION, A DIALOGUE, OR MULTIPLE CHOICE OPTIONS",
+        "references": "[list[str,dict] | required] REFERENCES FOR THE EVALUATION METRIC"
+    },
+    "responses": [
+        {
+            "response_id": "[str | auto] UNIQUE IDENTIFIER FOR THE RESPONSE",
+            "model": {
+                "name": "[str | non-empty] NAME OF THE RESPONDENT MODEL",
+                "size": "[str | optional] SIZE OF THE RESPONDENT MODEL",
+                "model_adaptation": {
+                    "system_instruction": "[str | required] SYSTEM INSTRUCTION OR PROMPT USED TO ADAPT THE ITEM FOR THIS RESPONSE",
+                    "generation_parameters": {
+                        "temperature": "[float | required] TEMPERATURE USED FOR GENERATION",
+                        "do_sample": "[bool | required] WHETHER OR NOT TO USE SAMPLING, FALSE MEANS GREEDY DECODING",
+                        "top_k": "[int | required] TOP-K VALUE USED FOR GENERATION",
+                        "top_p": "[float | required] TOP-P VALUE USED FOR GENERATION",
+                        "max_tokens": "[int | required] MAXIMUM NUMBER OF TOKENS GENERATED"
+                    },
+                    "tools": [
+                        {
+                            "type":"[str | required] TYPE OF THE TOOL, SUCH AS A SEARCH ENGINE",
+                            "content": "[any | required] TOOL AVAILABLE TO THE MODEL"
+                        }
+                    ]
+                }
+            },
+            "item_adaptation": {
+                "request_input": "[list[str,dict] | non-empty] ACTUAL INPUT PROVIDED TO THE MODEL FOR THIS RESPONSE, SUCH AS THE ADAPTED QUESTION OR DIALOGUE",
+                "demonstrations": "[list[str] | optional] DEMONSTRATIONS OR EXAMPLES PROVIDED TO THE MODEL FOR THIS RESPONSE",
+                "external_resources": [
+                    {
+                        "type":"[str | required] TYPE OF THE EXTERNAL RESOURCE",
+                        "content": "[any | required] AVAILABLE EXTERNAL RESOURCES FROM THE TEST ENVIRONMENT"
+                    }
+                ]
+            },
+            "response_content": "[list[str,dict] | non-empty] CONTENT OF THE RESPONSE, SUCH AS THE MODEL'S ANSWER OR OUTPUT",
+            "scores": [
+                {
+                    "metric": {
+                        "name": "[str | non-empty] NAME OF THE EVALUATION METRIC",
+                        "models": "[list[str] | required] MODELS OR ALGORITHMS USED TO COMPUTE THE EVALUATION METRIC",
+                        "extra_artifacts": [
+                            {
+                                "type": "[str | required] TYPE OF THE ARTIFACT",
+                                "content": "[any | required] ADDITIONAL ARTIFACT FOR SCORING THE RESPONSE"
+                            }
+                        ]
+                    },
+                    "value": "[int,float,bool | non-empty] NUMERIC VALUE OF THE EVALUATION METRIC"
+                }
+            ]
+        }
+    ],
+    "schema_version": "[str | auto] ITEMHUB SCHEMA VERSION"
+}
